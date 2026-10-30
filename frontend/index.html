@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-time Object Detection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="wrap top">
+  <h1>Real-time Object Detection</h1>
+  <p class="status" id="status" role="status">Connecting to the backend…</p>
+</header>
+
+<main class="wrap">
+  <div class="tabs" role="tablist" aria-label="Input source">
+    <button role="tab" id="tab-camera" aria-selected="true" data-mode="camera">Camera</button>
+    <button role="tab" id="tab-video" aria-selected="false" data-mode="video">Video file</button>
+    <button role="tab" id="tab-photo" aria-selected="false" data-mode="photo">Photo</button>
+  </div>
+
+  <div class="workspace">
+    <section class="stage-col" aria-label="Detection view">
+      <div class="stage" id="stage">
+        <video id="video" playsinline muted hidden></video>
+        <img id="photo" alt="" hidden>
+        <canvas id="overlay" aria-hidden="true"></canvas>
+        <div class="empty" id="empty">
+          <p id="empty-text">Start the camera to detect objects live.</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="mode-actions" data-for="camera">
+          <button class="btn solid" id="cam-start">Start camera</button>
+          <button class="btn" id="cam-stop" hidden>Stop</button>
+        </div>
+        <div class="mode-actions" data-for="video" hidden>
+          <label class="btn solid file">Choose video<input type="file" id="video-file" accept="video/*"></label>
+          <button class="btn" id="video-toggle" hidden>Pause</button>
+        </div>
+        <div class="mode-actions" data-for="photo" hidden>
+          <label class="btn solid file">Choose photo<input type="file" id="photo-file" accept="image/jpeg,image/png,image/webp,image/bmp"></label>
+        </div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="block">
+        <label for="conf" class="field-label">Confidence <output id="conf-out">0.40</output></label>
+        <input type="range" id="conf" min="0.1" max="0.9" step="0.05" value="0.4">
+        <p class="hint">Higher shows fewer, surer detections.</p>
+      </div>
+
+      <div class="block">
+        <label for="filter" class="field-label">Only detect</label>
+        <input type="text" id="filter" placeholder="All objects" list="class-list" autocomplete="off">
+        <datalist id="class-list"></datalist>
+        <p class="hint">Comma-separated, e.g. person, car</p>
+      </div>
+
+      <div class="block live">
+        <h2>Now</h2>
+        <dl class="readout">
+          <div><dt>FPS</dt><dd id="fps">–</dd></div>
+          <div><dt>Model time</dt><dd id="latency">–</dd></div>
+          <div><dt>Objects</dt><dd id="total">–</dd></div>
+        </dl>
+        <ul class="counts" id="counts"></ul>
+      </div>
+    </aside>
+  </div>
+
+  <section class="history" aria-labelledby="history-title">
+    <div class="history-head">
+      <h2 id="history-title">History</h2>
+      <button class="btn small" id="clear-history">Clear history</button>
+    </div>
+    <p class="summary" id="summary">No scans yet.</p>
+
+    <div class="history-grid">
+      <div>
+        <h3>Objects detected</h3>
+        <table class="table">
+          <thead><tr><th scope="col">Object</th><th scope="col">Times detected</th><th scope="col">Total objects</th></tr></thead>
+          <tbody id="stats-body"><tr><td colspan="3" class="muted">Detected objects will appear here.</td></tr></tbody>
+        </table>
+        <p class="hint">Times detected is the number of photos and sessions an object appeared in. In camera and video sessions, total objects counts the most seen at once, so one person in view for a minute counts once.</p>
+      </div>
+      <div>
+        <h3>Recent scans</h3>
+        <ol class="scans" id="scans"></ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Model weights (downloaded automatically)
+*.pt
+*.onnx
+
+# Outputs
+outputs/
+runs/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -18,3 +18,6 @@ runs/
 Thumbs.db
 .vscode/
 .idea/
+
+# Detection history database
+backend/history.db
